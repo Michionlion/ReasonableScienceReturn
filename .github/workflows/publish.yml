@@ -1,0 +1,26 @@
+name: Publish
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@main
+      with:
+        type: "zip"
+        filename: "ReasonableScienceReturn/ReasonableScienceReturn.zip"
+        directory: ".."
+        path: "ReasonableScienceReturn"
+        exclusions: "*.git*"
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifactErrorsFailBuild: true
+        artifacts: "ReasonableScienceReturn.zip"
+        generateReleaseNotes: true
+        token: ${{ secrets.GITHUB_TOKEN }}
